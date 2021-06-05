@@ -4,12 +4,16 @@ import (
 	"context"
 	"fmt"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
 	"grpc-cli/services"
 	"log"
 )
 
 func main(){
-	conn, err := grpc.Dial(":8081", grpc.WithInsecure())
+	//客户端加载证书
+	creds, err := credentials.NewClientTLSFromFile("keys/server.crt", "leixiaotian")
+	//conn, err := grpc.Dial(":8081", grpc.WithInsecure())		//无证书连接
+	conn, err := grpc.Dial(":8081", grpc.WithTransportCredentials(creds))
 	if err != nil {
 		log.Fatal(err)
 	}
